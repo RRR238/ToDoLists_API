@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:7118" # Expose HTTPS port
+      - "5000:5262" # Expose HTTP port
+    depends_on:
+      - database
+
+  database:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ToDoLists
+      POSTGRES_USER: richard.macus
+      POSTGRES_PASSWORD: abc123
+    ports:
+      - "5432:5432"
