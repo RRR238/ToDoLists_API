@@ -19,3 +19,14 @@ services:
       POSTGRES_PASSWORD: abc123
     ports:
       - "5432:5432"
+
+  migrate:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    working_dir: /app
+    volumes:
+      - .:/app  # Mount the project directory in the container
+    command: /bin/bash -c "dotnet tool install -g dotnet-ef && /root/.dotnet/tools/dotnet-ef database update"
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=database;Port=5432;Database=ToDoLists;Username=richard.macus;Password=abc123"
+    depends_on:
+      - database
