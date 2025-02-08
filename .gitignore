@@ -2,4 +2,4 @@
 .vscode/
 bin/
 obj/
-ai_module/.env
+AI_module/.env
