@@ -19,8 +19,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ToDoListsContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<UsersRepository>();
-builder.Services.AddScoped<PasswordHash>();
+builder.Services.AddScoped<Security>();
 builder.Services.AddScoped<ToDoListsRepository>();
+builder.Services.AddScoped<CallEndpoint>();
+builder.Services.AddHttpClient();
 
 
 builder.Services.AddAuthentication("Bearer").AddJwtBearer(options =>

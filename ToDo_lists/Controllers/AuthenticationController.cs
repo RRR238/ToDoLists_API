@@ -15,12 +15,12 @@ namespace ToDo_lists.Controllers
     {
 
         UsersRepository _usersRepo;
-        PasswordHash _passwordHash;
+        Security _security;
         IConfiguration _config;
-        public AuthenticationController(UsersRepository usersRepo, PasswordHash passwordHash, IConfiguration configuration) 
+        public AuthenticationController(UsersRepository usersRepo, Security security, IConfiguration configuration) 
         {
             _usersRepo = usersRepo;
-            _passwordHash = passwordHash;
+            _security =security;
             _config = configuration;
         }
 
@@ -36,7 +36,7 @@ namespace ToDo_lists.Controllers
                 return Conflict(new { message = "User name already exists." });
 
 
-            string hashed_password = _passwordHash.HashPassword(user.password);
+            string hashed_password = _security.HashPassword(user.password);
             Users newUser = new Users { name = user.name, password = hashed_password };
             _usersRepo.AddUser(newUser);
 
@@ -52,27 +52,15 @@ namespace ToDo_lists.Controllers
                 return BadRequest();
 
             Users existingUser = await _usersRepo.GetItemByName(user.name);
-            bool verifiedPassword = _passwordHash.VerifyPassword(user.password, existingUser.password);
+            if (existingUser == null)
+                return Unauthorized("User does not exist");
+
+            bool verifiedPassword = _security.VerifyPassword(user.password, existingUser.password);
 
             if(!verifiedPassword)
                 return Unauthorized();
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Authentication:SecretKey"]));
-
-            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            List<Claim> claimsForToken = new List<Claim>();
-            claimsForToken.Add(new Claim("sub", existingUser.id.ToString()));
-            claimsForToken.Add(new Claim(ClaimTypes.Name, existingUser.name));
-
-            var jwtSecurityToken = new JwtSecurityToken(_config["Authentication:Issuer"],
-                                                        _config["Authentication:Audience"],
-                                                        claimsForToken,
-                                                        DateTime.UtcNow,
-                                                        DateTime.UtcNow.AddHours(1),
-                                                        signingCredentials);
-
-            var tokenToReturn = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            var tokenToReturn = _security.GetJWTToken(_config, existingUser);
             return Ok(tokenToReturn);
         }
     }

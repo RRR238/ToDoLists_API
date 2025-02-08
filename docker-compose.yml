@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # C# API Service (ToDo_lists)
+  app:
+    build:
+      context: ./ToDo_lists  # Point to ToDo_lists directory
+      dockerfile: Dockerfile  # Dockerfile inside ToDo_lists
+    ports:
+      - "3000:7118"  # Expose HTTPS port for the C# API
+      - "5000:5262"  # Expose HTTP port for the C# API
+    depends_on:
+      - database  # Ensure PostgreSQL is up before starting the app
+
+  # PostgreSQL Service
+  database:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ToDoLists
+      POSTGRES_USER: richard.macus
+      POSTGRES_PASSWORD: abc123
+    ports:
+      - "5432:5432"
+
+  # Migration Service (For applying database migrations)
+  migrate:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    working_dir: /app
+    volumes:
+      - ./ToDo_lists:/app  # Mount the ToDo_lists directory inside the container
+    command: /bin/bash -c "dotnet tool install -g dotnet-ef && /root/.dotnet/tools/dotnet-ef database update"
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=database;Port=5432;Database=ToDoLists;Username=richard.macus;Password=abc123"
+    depends_on:
+      - database  # Ensure PostgreSQL is available before running migrations
+
+  # Python AI Module Service (AI_module)
+  ai_module:
+    build:
+      context: ./AI_module  # AI_module context pointing to the AI_module directory
+      dockerfile: Dockerfile  # Dockerfile inside the AI_module directory
+    ports:
+      - "8000:5000"  # Expose AI module port
+    depends_on:
+      - qdrant    # If AI module interacts with Qdrant service
+
+  # Qdrant (Vector DB) Service
+  qdrant:
+    image: qdrant/qdrant:latest  # Qdrant service image
+    ports:
+      - "6333:6333"  # Expose Qdrant port
+    environment:
+      - QDRANT__SERVICE__REST_PORT=6333
+      - QDRANT__SERVICE__GRPC_PORT=6334

@@ -2,9 +2,11 @@
   "profiles": {
     "http": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AI_MODULE_PORT": "8000",
+        "AI_MODULE_HOST": "ai_module"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5262"
@@ -12,16 +14,20 @@
     "https": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AI_MODULE_PORT": "8000",
+        "AI_MODULE_HOST": "ai_module"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7118;http://localhost:5262"
     },
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "AI_MODULE_PORT": "8000",
+        "AI_MODULE_HOST": "ai_module"
       }
     },
     "Container (Dockerfile)": {

@@ -4,19 +4,29 @@ using ToDo_lists.Entities;
 using ToDo_lists.Services;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using System.Net.Http;
+using System.Text.Json;
+using System.Text;
+using Microsoft.Extensions.Configuration;
+using System.Net.Http.Headers;
+using System.Text.Json.Nodes;
 
 namespace ToDo_lists.Controllers
 {
     [ApiController]
     public class ToDoListsController:ControllerBase
     {
-        ToDoListsRepository _toDoListRepo;
-        UsersRepository _usersRepo;
+        private ToDoListsRepository _toDoListRepo;
+        private UsersRepository _usersRepo;
+       private CallEndpoint _callEndpoint;
 
-        public ToDoListsController(ToDoListsRepository toDoListRepo, UsersRepository usersRepository)
+        public ToDoListsController(ToDoListsRepository toDoListRepo, UsersRepository usersRepository, 
+                                    CallEndpoint callEndpoint)
         {
             _toDoListRepo = toDoListRepo;
             _usersRepo = usersRepository;
+            _callEndpoint = callEndpoint;
+
         }
 
         [Authorize]
@@ -51,8 +61,62 @@ namespace ToDo_lists.Controllers
                 await _toDoListRepo.AddUserToDoListLink(newLink);
             }
 
+            toDoListRequest.owners.Add(creatorUsername);
+            var payload = new
+            {
+                to_do_list_name = toDoListRequest.toDoListName,
+                to_do_list = toDoListRequest.toDoList,
+                owners = toDoListRequest.owners,
+            };
+
+            var response = await _callEndpoint.PostRequest($"http://{AiServiceConfig.host}:{AiServiceConfig.port}/insert_items",payload);
+
             return Created(string.Empty, new { message = "To Do List added" });
 
+        }
+
+        [Authorize]
+        [HttpPost("similaritysearch")]
+        public async Task<IActionResult> GetSimilarItems(SimilaritySearchModel similarityRequest)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            string creatorUsername = User.FindFirst(ClaimTypes.Name)?.Value;
+
+            var payload = new
+            {
+                limit = similarityRequest.limit,
+                text = similarityRequest.text,
+                owner = creatorUsername
+            };
+
+            var response = await _callEndpoint.PostRequest($"http://{AiServiceConfig.host}:{AiServiceConfig.port}/search_items", payload);
+            if (response.IsSuccessStatusCode)
+            {
+                // Read the JSON body as a string
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(jsonResponse);
+                SimilaritySearchResponseModel deserializedResponse = JsonSerializer.Deserialize<SimilaritySearchResponseModel>(jsonResponse);
+                ToDoLists foundList;
+                ToDoItem foundItem;
+                List<FoundItemsModel> itemsToReturn = new List<FoundItemsModel>();
+
+                foreach (var item in deserializedResponse.responseItems)
+                {
+                    foundList = await _toDoListRepo.GetItemByName(item.to_do_list_name);
+                    foundItem = foundList.toDoList[item.item_number - 1];
+                    itemsToReturn.Add(new FoundItemsModel { Name = item.to_do_list_name, item = foundItem });
+                }
+
+                return Ok(itemsToReturn);
+
+            }
+            else
+            {
+                return StatusCode(500, "An error occurred while processing your search.");
+            }
+            
         }
 
         [HttpGet("getlist/{listName}/{getUsers}")]
@@ -85,6 +149,12 @@ namespace ToDo_lists.Controllers
 
             existingToDoList.toDoList = existingToDoList.toDoList.Append(item).ToList();
             await _toDoListRepo.SaveChangesAsync();
+            List<string >owners = existingToDoList.usersListsLinks.Select(link => link.username).ToList();
+            var payload = new {to_do_list_name=listName,
+                                owners = owners,text=item.text, 
+                                item_number= existingToDoList.toDoList.Count};
+            var response = await _callEndpoint.PostRequest($"http://{AiServiceConfig.host}:{AiServiceConfig.port}/add_item", payload);
+
             return Created(string.Empty, new { message = "Item added" });
         }
 
@@ -128,6 +198,8 @@ namespace ToDo_lists.Controllers
                 return BadRequest();
 
             await _toDoListRepo.RemoveToDoList(existingToDoList);
+
+            var response = await _callEndpoint.DeleteRequest($"http://{AiServiceConfig.host}:{AiServiceConfig.port}/delete_items/{listName}");
 
             return NoContent();
         }

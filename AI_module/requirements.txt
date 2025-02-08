@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+jwt
+PyJWT
+python-dotenv
+qdrant-client
+pydantic
+sentence_transformers
