@@ -17,8 +17,8 @@ async def test(to_do_list:To_do_list,
          client: AsyncQdrantClient = Depends(get_qdrant_client)):
 
     qdrant_repo = Qdrant_repository(client, Vector_search_config.collection)
+    item_number = 1
     for i in to_do_list.to_do_list:
-        item_number = 1
         metadata = {"item_number":item_number,
                     "to_do_list_name":to_do_list.to_do_list_name,
                     "owners":to_do_list.owners}
@@ -41,7 +41,6 @@ async def insert_vectors(similarity_payload: Similarity_search,
     filtered_results = [{"to_do_list_name":point.payload["to_do_list_name"],
                          "item_number":point.payload["item_number"]} for point in results.points]
 
-    print(filtered_results)
     return JSONResponse(status_code=200, content={"responseItems":filtered_results})
 
 

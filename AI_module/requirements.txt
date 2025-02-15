@@ -1,7 +1,6 @@
 fastapi
 uvicorn
-jwt
-PyJWT
+PyJWT==2.10.1
 python-dotenv
 qdrant-client
 pydantic

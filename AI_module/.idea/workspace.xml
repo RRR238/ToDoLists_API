@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5eb3050c-2801-434f-8d05-2f4ea11cbac5" name="Changes" comment="" />
+    <list default="true" id="5eb3050c-2801-434f-8d05-2f4ea11cbac5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/API.py" beforeDir="false" afterPath="$PROJECT_DIR$/API.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/create_collection.py" beforeDir="false" afterPath="$PROJECT_DIR$/create_collection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/security.py" beforeDir="false" afterPath="$PROJECT_DIR$/security.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ToDo_lists/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../ToDo_lists/Dockerfile" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,29 +29,29 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2sJ7Wg79JbdmXsjoFYp301Qsz0g" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.API.executor": "Run",
-    "Python.create_collection.executor": "Run",
-    "Python.models.executor": "Run",
-    "Python.security.executor": "Run",
-    "Python.services.executor": "Run",
-    "Python.vector_DB.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/richa/Desktop/ToDoLists_API/AI_module",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.API.executor&quot;: &quot;Run&quot;,
+    &quot;Python.create_collection.executor&quot;: &quot;Run&quot;,
+    &quot;Python.models.executor&quot;: &quot;Run&quot;,
+    &quot;Python.security.executor&quot;: &quot;Run&quot;,
+    &quot;Python.services.executor&quot;: &quot;Run&quot;,
+    &quot;Python.vector_DB.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/richa/Desktop/ToDoLists_API/AI_module&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\richa\Desktop\ToDoLists_API\AI_module" />

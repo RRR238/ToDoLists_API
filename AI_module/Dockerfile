@@ -17,7 +17,7 @@ EXPOSE 5000
 # Set environment variables (for Docker Compose)
 ENV SECRET_KEY="ExtremelyVeryStrongSecretKeyForJWT"
 ENV ALGORITHM="HS256"
-ENV ISSUER="https://localhost:7118"
+ENV ISSUER="http://localhost:7118"
 ENV AUDIENCE="ToDoListsAPI"
 ENV COLLECTION="to_do_list_collection"
 ENV EMBEDDING_MODEL="sentence-transformers/all-MiniLM-L6-v2"

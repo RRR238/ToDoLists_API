@@ -24,6 +24,10 @@ namespace ToDo_lists.Services
 
         public string GetJWTToken(IConfiguration _config, Users existingUser=null, bool tokenForClient = true)
         {
+
+            Console.WriteLine(_config["Authentication:SecretKey"]);
+            Console.WriteLine(_config["Authentication:Issuer"]);
+            Console.WriteLine(_config["Authentication:Audience"]);
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Authentication:SecretKey"]));
 
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);

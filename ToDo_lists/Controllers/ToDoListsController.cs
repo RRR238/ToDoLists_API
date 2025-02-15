@@ -106,7 +106,7 @@ namespace ToDo_lists.Controllers
                 {
                     foundList = await _toDoListRepo.GetItemByName(item.to_do_list_name);
                     foundItem = foundList.toDoList[item.item_number - 1];
-                    itemsToReturn.Add(new FoundItemsModel { Name = item.to_do_list_name, item = foundItem });
+                    itemsToReturn.Add(new FoundItemsModel { toDoListName = item.to_do_list_name, itemNumber=item.item_number , item = foundItem });
                 }
 
                 return Ok(itemsToReturn);
@@ -172,7 +172,7 @@ namespace ToDo_lists.Controllers
             if (!existingToDoList.usersListsLinks.Any(link => link.username == currentUser))
                 return BadRequest();
 
-            if(existingToDoList.toDoList.Count  > itemNumber)
+            if(existingToDoList.toDoList.Count  < itemNumber)
                 return BadRequest();
 
             ToDoItem item = existingToDoList.toDoList[itemNumber - 1];
